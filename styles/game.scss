@@ -1,0 +1,52 @@
+@import 'site';
+
+$board-background-color: #bbada0;
+$tile-background-color: #776e65;
+
+.game {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  border-radius: 5px;
+  height: 400px;
+  width: 400px;
+  background-color: $board-background-color;
+
+  %tile {
+    flex-grow: 1;
+    flex-basis: 21%;
+    margin: 5px;
+    border-radius: 5px;
+    border-color: blue;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .emptyTile {
+    @extend %tile;
+    background-color: $tile-background-color;
+  }
+
+  %baseNumberTile {
+    @extend %tile;
+
+    .number {
+      position: absolute;
+      font-size: xx-large;
+      color: $color;
+    }
+  }
+
+  .tile2 {
+    @extend %baseNumberTile;
+    background-color: green;
+  }
+
+  .tile4 {
+    @extend %baseNumberTile;
+    background-color: blue;
+  }
+}
