@@ -1,7 +1,24 @@
 @import 'site';
 
-$board-background-color: #bbada0;
+$board-background-color: #beaca6;
 $tile-background-color: #776e65;
+
+$dark-text: #786d68;
+$light-text: #fef7fa;
+
+$tile-colors: (
+  ($dark-text, #eee4da), /* 2 */
+  ($dark-text, #ece0c6), /* 4 */
+  ($light-text, #f1b078), /* 8 */
+  ($light-text, #ed8b51), /* 16 */
+  ($light-text, #f47c62), /* 32 */
+  ($light-text, #e95937), /* 64 */
+  ($light-text, #f2d86a), /* 128 */
+  ($light-text, #e3c02c), /* 512 */
+  ($light-text, #e2b913), /* 1024 */
+  ($light-text, #ecc400), /* 2048 */
+  ($light-text, #5eda92)  /* 4096 */
+);
 
 .game {
   display: flex;
@@ -36,17 +53,16 @@ $tile-background-color: #776e65;
     .number {
       position: absolute;
       font-size: xx-large;
-      color: $color;
     }
   }
 
-  .tile2 {
-    @extend %baseNumberTile;
-    background-color: green;
-  }
-
-  .tile4 {
-    @extend %baseNumberTile;
-    background-color: blue;
+  $n: 2;
+  @each $tile-color in $tile-colors {
+    .tile#{$n} {
+      @extend %baseNumberTile;
+      color: nth($tile-color, 1);
+      background-color: nth($tile-color, 2);
+    }
+    $n: $n * 2;
   }
 }
