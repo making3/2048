@@ -38,7 +38,10 @@ export default class Game extends Component {
 
     return (
       <div>
-        <div className={css.score}>{this.state.score}</div>
+        <div className={css.score}>
+          <label className={css.label}>Score</label>
+          {this.state.score}
+        </div>
         <div className={css.game}>{tiles}</div>
       </div>
     )

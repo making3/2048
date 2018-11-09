@@ -20,6 +20,23 @@ $tile-colors: (
   ($light-text, #5eda92)  /* 4096 */
 );
 
+.score {
+  float: right;
+  margin-bottom: 15px;
+
+  background-color: $board-background-color;
+  color: $light-text;
+  border-radius: 5px;
+  display: inline-block;
+  padding: 5px;
+  text-align: center;
+
+  .label {
+    display: block;
+    color: #e9d9c6;
+  }
+}
+
 .game {
   display: flex;
   flex-wrap: wrap;
@@ -28,6 +45,7 @@ $tile-colors: (
   border-radius: 5px;
   height: 400px;
   width: 400px;
+  clear: both;
   background-color: $board-background-color;
 
   %tile {
