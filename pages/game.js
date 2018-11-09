@@ -63,19 +63,19 @@ export default class Game extends Component {
 }
 
 function moveLeft(grid) {
-  return move(grid, getValueFromGridRow, new LeftEnumerator());
+  return move(grid, new LeftEnumerator());
 }
 
 function moveRight(grid) {
-  return move(grid, getValueFromGridRow, new RightEnumerator());
+  return move(grid, new RightEnumerator());
 }
 
 function moveDown(grid) {
-  return move(grid, getValueFromGridColumn, new DownEnumerator());
+  return move(grid, new DownEnumerator());
 }
 
 function moveUp(grid) {
-  return move(grid, getValueFromGridColumn, new UpEnumerator());
+  return move(grid, new UpEnumerator());
 }
 
 class UpEnumerator {
@@ -91,8 +91,8 @@ class UpEnumerator {
   eof() {
     return this.x >= 4;
   }
-  getValue(grid, col) {
-    return grid[this.x][col];
+  getValue(grid, col, row = this.x) {
+    return grid[row][col];
   }
   setValue(grid, col, value) {
     grid[this.x][col] = value;
@@ -127,8 +127,8 @@ class DownEnumerator extends UpEnumerator {
 }
 
 class LeftEnumerator extends UpEnumerator {
-  getValue(grid, row) {
-    return grid[row][this.x];
+  getValue(grid, row, col = this.x) {
+    return grid[row][col];
   }
   setValue(grid, row, value) {
     grid[row][this.x] = value;
@@ -139,8 +139,8 @@ class LeftEnumerator extends UpEnumerator {
 }
 
 class RightEnumerator extends DownEnumerator {
-  getValue(grid, row) {
-    return grid[row][this.x];
+  getValue(grid, row, col = this.x) {
+    return grid[row][col];
   }
   setValue(grid, row, value) {
     grid[row][this.x] = value;
@@ -150,9 +150,9 @@ class RightEnumerator extends DownEnumerator {
   }
 }
 
-function move(grid, getValueFromGrid,  enumerator) {
+function move(grid, enumerator) {
   const emptyCoordinates = [];
-  const newGrid = shiftGrid(grid, getValueFromGrid, (i, values) => {
+  const newGrid = shiftGrid(grid, enumerator.getValue.bind(enumerator), (i, values) => {
     const cs = [];
     while (!enumerator.eof()) {
       enumerator.setValue(grid, i, enumerator.getValueFromStack(values) || 0);
@@ -172,25 +172,17 @@ function move(grid, getValueFromGrid,  enumerator) {
   return addRandom2(newGrid, emptyCoordinates);
 }
 
-function getValueFromGridRow(grid, col, row) {
-  return grid[row][col];
-}
-
-function getValueFromGridColumn(grid, row, col) {
-  return grid[row][col];
-}
-
-function shiftGrid(grid, getValueFromGrid, mapColumn) {
+function shiftGrid(grid, getValueFromGrid, map) {
   for (let i = 0; i < 4; i++) {
     const s = [];
 
     for (let k = 0; k < 4; k++) {
-      const value = getValueFromGrid(grid, k, i);
+      const value = getValueFromGrid(grid, i, k);
       if (value > 0) {
         s.push(value);
       }
     }
-    mapColumn(i, s);
+    map(i, s);
   }
   return grid;
 }
