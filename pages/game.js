@@ -63,54 +63,111 @@ export default class Game extends Component {
 }
 
 function moveLeft(grid) {
-  // TODO: Remove repetition of newGrid/addRandom2/emptyCoordinates.
-  const emptyCoordinates = [];
-  const newGrid = shiftGrid(grid, getValueFromGridRow, (row, values) => {
-    for (let col = 0; col < 4; col++) {
-      grid[row][col] = values.shift() || 0;
-      if (grid[row][col] === 0) {
-        emptyCoordinates.push({ row, col });
-      }
-    }
-  });
-  return addRandom2(newGrid, emptyCoordinates);
+  return move(grid, getValueFromGridRow, new LeftEnumerator());
 }
 
 function moveRight(grid) {
-  const emptyCoordinates = [];
-  const newGrid = shiftGrid(grid, getValueFromGridRow, (row, values) => {
-    for (let col = 3; col >=0; col--) {
-      grid[row][col] = values.pop() || 0;
-      if (grid[row][col] === 0) {
-        emptyCoordinates.push({ row, col });
-      }
-    }
-  });
-  return addRandom2(newGrid, emptyCoordinates);
+  return move(grid, getValueFromGridRow, new RightEnumerator());
 }
 
 function moveDown(grid) {
-  const emptyCoordinates = [];
-  const newGrid = shiftGrid(grid, getValueFromGridColumn, (col, values) => {
-    for (let row = 3; row >=0; row--) {
-      grid[row][col] = values.pop() || 0;
-      if (grid[row][col] === 0) {
-        emptyCoordinates.push({ row, col });
-      }
-    }
-  });
-  return addRandom2(newGrid, emptyCoordinates);
+  return move(grid, getValueFromGridColumn, new DownEnumerator());
 }
 
 function moveUp(grid) {
+  return move(grid, getValueFromGridColumn, new UpEnumerator());
+}
+
+class UpEnumerator {
+  constructor() {
+    this.reset();
+  }
+  next() {
+    this.x++;
+  }
+  previous() {
+    this.x--;
+  }
+  eof() {
+    return this.x >= 4;
+  }
+  getValue(grid, col) {
+    return grid[this.x][col];
+  }
+  setValue(grid, col, value) {
+    grid[this.x][col] = value;
+  }
+  getEmptyCoordinates(col) {
+    return { row: this.x, col };
+  }
+  getValueFromStack(stack) {
+    return stack.shift();
+  }
+  reset() {
+    this.x = 0;
+  }
+}
+
+class DownEnumerator extends UpEnumerator {
+  next() {
+    this.x--;
+  }
+  previous() {
+    this.x++;
+  }
+  eof() {
+    return this.x < 0;
+  }
+  getValueFromStack(stack) {
+    return stack.pop();
+  }
+  reset() {
+    this.x = 3;
+  }
+}
+
+class LeftEnumerator extends UpEnumerator {
+  getValue(grid, row) {
+    return grid[row][this.x];
+  }
+  setValue(grid, row, value) {
+    grid[row][this.x] = value;
+  }
+  getEmptyCoordinates(row) {
+    return { row, col: this.x };
+  }
+}
+
+class RightEnumerator extends DownEnumerator {
+  getValue(grid, row) {
+    return grid[row][this.x];
+  }
+  setValue(grid, row, value) {
+    grid[row][this.x] = value;
+  }
+  getEmptyCoordinates(row) {
+    return { row, col: this.x };
+  }
+}
+
+function move(grid, getValueFromGrid,  enumerator) {
   const emptyCoordinates = [];
-  const newGrid = shiftGrid(grid, getValueFromGridColumn, (col, values) => {
-    for (let row = 0; row < 4; row++) {
-      grid[row][col] = values.shift() || 0;
-      if (grid[row][col] === 0) {
-        emptyCoordinates.push({ row, col });
+  const newGrid = shiftGrid(grid, getValueFromGrid, (i, values) => {
+    const cs = [];
+    while (!enumerator.eof()) {
+      enumerator.setValue(grid, i, enumerator.getValueFromStack(values) || 0);
+      if (cs.length > 0 && cs[cs.length - 1] === enumerator.getValue(grid, i)) {
+        enumerator.previous();
+        enumerator.setValue(grid, i, enumerator.getValue(grid, i) + cs.pop())
       }
+      if (enumerator.getValue(grid, i) === 0) {
+        emptyCoordinates.push(enumerator.getEmptyCoordinates(i));
+      } else {
+        cs.push(enumerator.getValue(grid, i));
+      }
+      enumerator.next();
     }
+    enumerator.reset();
   });
   return addRandom2(newGrid, emptyCoordinates);
 }
