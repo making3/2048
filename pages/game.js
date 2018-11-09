@@ -15,11 +15,17 @@ export default class Game extends Component {
     document.addEventListener('keydown', (event) => {
       this.handleKeyPress(event.key);
     });
-    const row = getRandomNumber(4);
-    const col = getRandomNumber(4);
-    this.state.grid[row][col] = 2;
+    let i = 0;
+    while (i < 2) {
+      const row = getRandomNumber(4);
+      const col = getRandomNumber(4);
+      if (this.state.grid[row][col] === 0) {
+        // TODO: Add possibility of generating a 4 here and addRandom2.
+        this.state.grid[row][col] = 2;
+        i++;
+      }
+    }
     this.setState({
-      score: 2,
       grid: this.state.grid
     });
   }
@@ -31,7 +37,10 @@ export default class Game extends Component {
     );
 
     return (
-      <div className={css.game}>{tiles}</div>
+      <div>
+        <div className={css.score}>{this.state.score}</div>
+        <div className={css.game}>{tiles}</div>
+      </div>
     )
   }
   handleKeyPress(key) {
@@ -42,8 +51,10 @@ export default class Game extends Component {
       3. Add a 2 to a random location on the board with a 0.
         3a. End the game *if* the board is filled.
     */
+    const score = this.handleArrowEvent(key);
     this.setState({
-      grid: this.handleArrowEvent(key)
+      grid: this.state.grid,
+      score: this.state.score + score
     });
   }
   handleArrowEvent(key) {
@@ -57,7 +68,7 @@ export default class Game extends Component {
       case 'arrowright':
         return move(this.state.grid, new RightEnumerator());
       default:
-        return this.state.grid;
+        return 0;
     }
   }
 }
@@ -135,25 +146,31 @@ class RightEnumerator extends DownEnumerator {
 }
 
 function move(grid, enumerator) {
+  let score = 0;
   const emptyCoordinates = [];
-  const newGrid = shiftGrid(grid, enumerator.getValue.bind(enumerator), (i, values) => {
-    const cs = [];
+  shiftGrid(grid, enumerator.getValue.bind(enumerator), (i, values) => {
+    const stack = [];
     while (!enumerator.eof()) {
       enumerator.setValue(grid, i, enumerator.getValueFromStack(values) || 0);
-      if (cs.length > 0 && cs[cs.length - 1] === enumerator.getValue(grid, i)) {
+      if (stack.length > 0 && stack[stack.length - 1] === enumerator.getValue(grid, i)) {
         enumerator.previous();
-        enumerator.setValue(grid, i, enumerator.getValue(grid, i) + cs.pop())
+        const newValue = enumerator.getValue(grid, i) + stack.pop()
+        score += newValue;
+        enumerator.setValue(grid, i, newValue);
       }
       if (enumerator.getValue(grid, i) === 0) {
         emptyCoordinates.push(enumerator.getEmptyCoordinates(i));
       } else {
-        cs.push(enumerator.getValue(grid, i));
+        stack.push(enumerator.getValue(grid, i));
       }
       enumerator.next();
     }
     enumerator.reset();
   });
-  return addRandom2(newGrid, emptyCoordinates);
+
+  // TODO: Don't add a random 2 if tiles were not shifted (i.e. it was already at an edge).
+  addRandom2(grid, emptyCoordinates);
+  return score;
 }
 
 function shiftGrid(grid, getValueFromGrid, map) {
@@ -168,7 +185,6 @@ function shiftGrid(grid, getValueFromGrid, map) {
     }
     map(i, s);
   }
-  return grid;
 }
 
 function addRandom2(grid, emptyCoordinates) {
@@ -176,13 +192,11 @@ function addRandom2(grid, emptyCoordinates) {
   const {row,col} = emptyCoordinates[coordinate];
 
   grid[row][col] = 2;
-  return grid;
 }
 
 function getRandomNumber(max) {
   return Math.floor(Math.random() * (max));
 }
-
 
 function getTile(rowIndex, colIndex, tileValue) {
   const key = rowIndex + colIndex;
