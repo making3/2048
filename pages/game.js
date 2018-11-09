@@ -6,14 +6,21 @@ export default class Game extends Component {
     score: 0,
     grid: [
       [0,0,0,0],
-      [0,0,8,0],
-      [0,0,4,2],
+      [0,0,0,0],
+      [0,0,0,0],
       [0,0,0,0]
     ]
   }
   componentDidMount() {
     document.addEventListener('keydown', (event) => {
       this.handleKeyPress(event.key);
+    });
+    const row = getRandomNumber(4);
+    const col = getRandomNumber(4);
+    this.state.grid[row][col] = 2;
+    this.setState({
+      score: 2,
+      grid: this.state.grid
     });
   }
   render() {
@@ -24,7 +31,7 @@ export default class Game extends Component {
     );
 
     return (
-      <div tabIndex="0" className={css.game} onKeyPress={this.handleKeyPress}>{tiles}</div>
+      <div className={css.game}>{tiles}</div>
     )
   }
   handleKeyPress(key) {
@@ -42,54 +49,70 @@ export default class Game extends Component {
   handleArrowEvent(key) {
     switch (key.toLowerCase()) {
       case 'arrowdown':
-        return moveDown(this.state.grid)
+        return moveDown(this.state.grid);
       case 'arrowup':
-        return moveUp(this.state.grid)
+        return moveUp(this.state.grid);
       case 'arrowleft':
-        return moveLeft(this.state.grid)
+        return moveLeft(this.state.grid);
       case 'arrowright':
-        return moveRight(this.state.grid)
+        return moveRight(this.state.grid);
       default:
         return this.state.grid;
     }
   }
 }
 
-function addRandom2(grid) {
-  // TODO: Implement
-  return grid;
-}
-
 function moveLeft(grid) {
-  return shiftGrid(grid, getValueFromGridRow, (row, values) => {
+  // TODO: Remove repetition of newGrid/addRandom2/emptyCoordinates.
+  const emptyCoordinates = [];
+  const newGrid = shiftGrid(grid, getValueFromGridRow, (row, values) => {
     for (let col = 0; col < 4; col++) {
       grid[row][col] = values.shift() || 0;
+      if (grid[row][col] === 0) {
+        emptyCoordinates.push({ row, col });
+      }
     }
   });
+  return addRandom2(newGrid, emptyCoordinates);
 }
 
 function moveRight(grid) {
-  return shiftGrid(grid, getValueFromGridRow, (row, values) => {
+  const emptyCoordinates = [];
+  const newGrid = shiftGrid(grid, getValueFromGridRow, (row, values) => {
     for (let col = 3; col >=0; col--) {
       grid[row][col] = values.pop() || 0;
+      if (grid[row][col] === 0) {
+        emptyCoordinates.push({ row, col });
+      }
     }
   });
+  return addRandom2(newGrid, emptyCoordinates);
 }
 
 function moveDown(grid) {
-  return shiftGrid(grid, getValueFromGridColumn, (col, values) => {
+  const emptyCoordinates = [];
+  const newGrid = shiftGrid(grid, getValueFromGridColumn, (col, values) => {
     for (let row = 3; row >=0; row--) {
       grid[row][col] = values.pop() || 0;
+      if (grid[row][col] === 0) {
+        emptyCoordinates.push({ row, col });
+      }
     }
   });
+  return addRandom2(newGrid, emptyCoordinates);
 }
 
 function moveUp(grid) {
-  return shiftGrid(grid, getValueFromGridColumn, (col, values) => {
+  const emptyCoordinates = [];
+  const newGrid = shiftGrid(grid, getValueFromGridColumn, (col, values) => {
     for (let row = 0; row < 4; row++) {
       grid[row][col] = values.shift() || 0;
+      if (grid[row][col] === 0) {
+        emptyCoordinates.push({ row, col });
+      }
     }
   });
+  return addRandom2(newGrid, emptyCoordinates);
 }
 
 function getValueFromGridRow(grid, col, row) {
@@ -114,6 +137,19 @@ function shiftGrid(grid, getValueFromGrid, mapColumn) {
   }
   return grid;
 }
+
+function addRandom2(grid, emptyCoordinates) {
+  const coordinate = getRandomNumber(emptyCoordinates.length);
+  const {row,col} = emptyCoordinates[coordinate];
+
+  grid[row][col] = 2;
+  return grid;
+}
+
+function getRandomNumber(max) {
+  return Math.floor(Math.random() * (max));
+}
+
 
 function getTile(rowIndex, colIndex, tileValue) {
   const key = rowIndex + colIndex;
