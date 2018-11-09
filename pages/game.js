@@ -49,33 +49,17 @@ export default class Game extends Component {
   handleArrowEvent(key) {
     switch (key.toLowerCase()) {
       case 'arrowdown':
-        return moveDown(this.state.grid);
+        return move(this.state.grid, new DownEnumerator());
       case 'arrowup':
-        return moveUp(this.state.grid);
+        return move(this.state.grid, new UpEnumerator());
       case 'arrowleft':
-        return moveLeft(this.state.grid);
+        return move(this.state.grid, new LeftEnumerator());
       case 'arrowright':
-        return moveRight(this.state.grid);
+        return move(this.state.grid, new RightEnumerator());
       default:
         return this.state.grid;
     }
   }
-}
-
-function moveLeft(grid) {
-  return move(grid, new LeftEnumerator());
-}
-
-function moveRight(grid) {
-  return move(grid, new RightEnumerator());
-}
-
-function moveDown(grid) {
-  return move(grid, new DownEnumerator());
-}
-
-function moveUp(grid) {
-  return move(grid, new UpEnumerator());
 }
 
 class UpEnumerator {
