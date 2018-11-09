@@ -61,7 +61,7 @@ function addRandom2(grid) {
 }
 
 function moveLeft(grid) {
-  return shiftGridColumns(grid, getValueFromGridRow, (row, values) => {
+  return shiftGrid(grid, getValueFromGridRow, (row, values) => {
     for (let col = 0; col < 4; col++) {
       grid[row][col] = values.shift() || 0;
     }
@@ -69,7 +69,7 @@ function moveLeft(grid) {
 }
 
 function moveRight(grid) {
-  return shiftGridColumns(grid, getValueFromGridRow, (row, values) => {
+  return shiftGrid(grid, getValueFromGridRow, (row, values) => {
     for (let col = 3; col >=0; col--) {
       grid[row][col] = values.pop() || 0;
     }
@@ -77,7 +77,7 @@ function moveRight(grid) {
 }
 
 function moveDown(grid) {
-  return shiftGridColumns(grid, getValueFromGridColumn, (col, values) => {
+  return shiftGrid(grid, getValueFromGridColumn, (col, values) => {
     for (let row = 3; row >=0; row--) {
       grid[row][col] = values.pop() || 0;
     }
@@ -85,7 +85,7 @@ function moveDown(grid) {
 }
 
 function moveUp(grid) {
-  return shiftGridColumns(grid, getValueFromGridColumn, (col, values) => {
+  return shiftGrid(grid, getValueFromGridColumn, (col, values) => {
     for (let row = 0; row < 4; row++) {
       grid[row][col] = values.shift() || 0;
     }
@@ -100,7 +100,7 @@ function getValueFromGridColumn(grid, row, col) {
   return grid[row][col];
 }
 
-function shiftGridColumns(grid, getValueFromGrid, mapColumn) {
+function shiftGrid(grid, getValueFromGrid, mapColumn) {
   for (let i = 0; i < 4; i++) {
     const s = [];
 
