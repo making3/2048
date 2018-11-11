@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[8],{207:function(n,e,o){__NEXT_REGISTER_PAGE("/game",function(){return n.exports=o(77),{page:n.exports.default}})}},[[207,1,0,2]]]);
