@@ -1,13 +1,14 @@
 $header-color: #f9f6f2;
 $header-background-color: #8f7a66;
 $background-color: #faf8ef;
-$color: #f9f6f2;
+$border-radius: 5px;
 
 @mixin transform($property) {
   -webkit-transform: $property;
   -ms-transform: $property;
   transform: $property;
 }
+
 
 html {
   height: 100%;
@@ -46,4 +47,15 @@ html {
   display: flex;
   justify-content: center;
   color: $header-background-color;
+}
+
+button {
+  cursor: pointer;
+  font-size: 100%;
+  font-family: inherit;
+  border: 0;
+  color: $header-color;
+  background-color: $header-background-color;
+  border-radius: $border-radius;
+  padding: 10px;
 }

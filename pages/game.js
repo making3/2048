@@ -1,31 +1,18 @@
 import { Component } from 'react';
 import css from '../styles/game.scss';
 import { getRandomTileNumber, UpEnumerator, DownEnumerator, LeftEnumerator, RightEnumerator } from '../lib';
+import Score from '../components/score';
 
 export default class Game extends Component {
-  state = {
-    score: 0,
-    active: true,
-    grid: [
-      [0,0,0,0],
-      [0,0,0,0],
-      [0,0,0,0],
-      [0,0,0,0]
-    ]
+  constructor(props) {
+    super(props);
+    this.state = getNewState(0);
   }
   componentDidMount() {
     document.addEventListener('keydown', (event) => {
       this.handleKeyPress(event.key);
     });
-    let i = 0;
-    while (i < 2) {
-      const row = getRandomNumber(4);
-      const col = getRandomNumber(4);
-      if (this.state.grid[row][col] === 0) {
-        this.state.grid[row][col] = getRandomTileNumber();
-        i++;
-      }
-    }
+    addRandom2(this.state.grid);
     this.setState({
       grid: this.state.grid
     });
@@ -39,10 +26,9 @@ export default class Game extends Component {
 
     return (
       <div>
-        <div className={css.score}>
-          <label className={css.label}>Score</label>
-          {this.state.score}
-        </div>
+        <button className={css.newGame} onClick={this.resetGame.bind(this)}>New Game</button>
+        <Score score={this.state.score} label="Score" />
+        <Score score={this.state.highScore} label="High Score" />
         <div className={css.game}>
           {!this.state.active &&
             <div className={css.gameOver}>
@@ -53,6 +39,11 @@ export default class Game extends Component {
         </div>
       </div>
     )
+  }
+  resetGame() {
+    const resetState = getNewState(this.state.highScore);
+    addRandom2(resetState.grid);
+    this.setState(resetState);
   }
   handleKeyPress(key) {
     if (!this.state.active) {
@@ -67,11 +58,14 @@ export default class Game extends Component {
         3a. End the game *if* the board is filled.
     */
     const { score, active } = this.handleArrowEvent(key);
+    const newScore = this.state.score + score;
+    const highScore = this.state.highScore > newScore ? this.state.highScore : newScore;
 
     this.setState({
       grid: this.state.grid,
-      score: this.state.score + score,
-      active
+      score: newScore,
+      active,
+      highScore
     });
   }
   handleArrowEvent(key) {
@@ -86,6 +80,18 @@ export default class Game extends Component {
         return move(this.state.grid, new RightEnumerator());
       default:
         return { score: 0, active: true };
+    }
+  }
+}
+
+function addRandom2(grid) {
+  let i = 0;
+  while (i < 2) {
+    const row = getRandomNumber(4);
+    const col = getRandomNumber(4);
+    if (grid[row][col] === 0) {
+      grid[row][col] = getRandomTileNumber();
+      i++;
     }
   }
 }
@@ -121,7 +127,7 @@ function move(grid, enumerator) {
   });
 
   if (changedValues) {
-    addRandom2(grid, emptyCoordinates);
+    addRandom2WithCoordinates(grid, emptyCoordinates);
   }
   return {
     score,
@@ -143,13 +149,14 @@ function shiftGrid(grid, getValueFromGrid, map) {
   }
 }
 
-function addRandom2(grid, emptyCoordinates) {
+function addRandom2WithCoordinates(grid, emptyCoordinates) {
   const coordinate = getRandomNumber(emptyCoordinates.length);
   const {row,col} = emptyCoordinates[coordinate];
 
   grid[row][col] = getRandomTileNumber();
 }
 
+// TODO: Move to generate
 function getRandomNumber(max) {
   return Math.floor(Math.random() * (max));
 }
@@ -164,4 +171,18 @@ function getTile(rowIndex, colIndex, tileValue) {
   return <div className={tileClass} key={key}>
     <div className={css.number}>{tileValue}</div>
   </div>
+}
+
+function getNewState(highScore) {
+  return {
+    score: 0,
+    highScore,
+    active: true,
+    grid: [
+      [0,0,0,0],
+      [0,0,0,0],
+      [0,0,0,0],
+      [0,0,0,0]
+    ]
+  }
 }

@@ -1,7 +1,5 @@
 @import 'site';
 
-$boarder-radius: 5px;
-
 $board-size: 400px;
 $board-background-color: #beaca6;
 $tile-background-color: #776e65;
@@ -25,13 +23,14 @@ $tile-colors: (
 
 .score {
   float: right;
+  padding: 10px;
+  margin-left: 10px;
   margin-bottom: 15px;
 
   background-color: $board-background-color;
   color: $light-text;
-  border-radius: $boarder-radius;
+  border-radius: $border-radius;
   display: inline-block;
-  padding: 5px;
   text-align: center;
 
   .label {
@@ -91,7 +90,7 @@ $tile-colors: (
 .gameOver {
   height: $board-size;
   width: $board-size;
-  border-radius: $boarder-radius;
+  border-radius: $border-radius;
   position: absolute;
   z-index: 1000;
   text-align: center;
@@ -101,4 +100,8 @@ $tile-colors: (
   .label {
     font-size: 40px;
   }
+}
+
+.newGame {
+  font-size: large;
 }
