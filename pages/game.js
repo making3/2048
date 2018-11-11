@@ -43,11 +43,11 @@ export default class Game extends Component {
 
     return (
       <div>
-        <button className={css.newGame} onClick={this.resetGame.bind(this)}>New Game</button>
         <div className={css.scores}>
           <Score score={this.state.highScore} label="High Score" />
           <Score score={this.state.score} label="Score" />
         </div>
+        <button className={css.newGame} onClick={this.resetGame.bind(this)}>New Game</button>
         <div className={css.game}>
           {!this.state.active &&
             <div className={css.gameOver}>

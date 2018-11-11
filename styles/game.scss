@@ -29,11 +29,17 @@ $large-board-size: 400px;
 
 $break-small: 300px;
 $medium-board-size: 300px;
-$small-board-size: 200px;
+$small-board-size: 225px;
 
 @mixin respond-to($media) {
   @if $media == handhelds {
     @media only screen and (max-width: $break-small) { @content; }
+  }
+  @if $media == not-handhelds {
+    @media only screen and (min-width: $break-small + 1) { @content; }
+  }
+  @else if $media == not-wide-screens {
+    @media only screen and (max-width: $break-large - 1) { @content; }
   }
   @else if $media == medium-screens {
     @media only screen and (min-width: $break-small + 1) and (max-width: $break-large - 1) { @content; }
@@ -49,6 +55,13 @@ $small-board-size: 200px;
   justify-content: space-evenly;
   border-radius: 5px;
   background-color: $board-background-color;
+
+  @include respond-to(not-wide-screens) {
+    margin-top: 5px;
+  }
+  @include respond-to(wide-screens) {
+    margin-top: 20px;
+  }
 
   @include respond-to(handhelds) {
     height: $small-board-size;
@@ -134,19 +147,19 @@ $small-board-size: 200px;
 
 .newGame {
   font-size: large;
-  @include respond-to(handhelds) {
+  @include respond-to(not-wide-screens) {
     width: 100%;
     display: block;
-    margin-bottom: 5px;
   }
 }
 
 .scores {
-  @include respond-to(handhelds) {
-    /* TODO: Center and fill */
-  }
   @include respond-to(medium-screens) {
-    float: right;
+    width: 220px;
+  }
+  @include respond-to(not-wide-screens) {
+    margin: auto;
+    margin-bottom: 5px;
   }
   @include respond-to(wide-screens) {
     float: right;
@@ -156,7 +169,13 @@ $small-board-size: 200px;
 .score {
   padding: 10px;
   margin-left: 10px;
-  margin-bottom: 15px;
+
+  @include respond-to(handhelds) {
+    width: 73px;
+  }
+  @include respond-to(not-handhelds) {
+    width: 80px;
+  }
 
   background-color: $board-background-color;
   color: $light-text;
