@@ -1,6 +1,6 @@
 @import 'site';
 
-$board-size: 400px;
+
 $board-background-color: #beaca6;
 $tile-background-color: #776e65;
 
@@ -21,21 +21,25 @@ $tile-colors: (
   ($light-text, #5eda92)  /* 4096 */
 );
 
-.score {
-  float: right;
-  padding: 10px;
-  margin-left: 10px;
-  margin-bottom: 15px;
+/*
+  Scaling
+*/
+$break-large: 417px;
+$large-board-size: 400px;
 
-  background-color: $board-background-color;
-  color: $light-text;
-  border-radius: $border-radius;
-  display: inline-block;
-  text-align: center;
+$break-small: 300px;
+$medium-board-size: 300px;
+$small-board-size: 200px;
 
-  .label {
-    display: block;
-    color: #e9d9c6;
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media only screen and (max-width: $break-small) { @content; }
+  }
+  @else if $media == medium-screens {
+    @media only screen and (min-width: $break-small + 1) and (max-width: $break-large - 1) { @content; }
+  }
+  @else if $media == wide-screens {
+    @media only screen and (min-width: $break-large) { @content; }
   }
 }
 
@@ -43,12 +47,21 @@ $tile-colors: (
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-
   border-radius: 5px;
-  height: $board-size;
-  width: $board-size;
-  clear: both;
   background-color: $board-background-color;
+
+  @include respond-to(handhelds) {
+    height: $small-board-size;
+    width: $small-board-size;
+  }
+  @include respond-to(medium-screens) {
+    height: $medium-board-size;
+    width: $medium-board-size;
+  }
+  @include respond-to(wide-screens) {
+    height: $large-board-size;
+    width: $large-board-size;
+  }
 
   %tile {
     flex-grow: 1;
@@ -72,7 +85,16 @@ $tile-colors: (
 
     .number {
       position: absolute;
-      font-size: xx-large;
+
+      @include respond-to(handhelds) {
+        font-size: medium;
+      }
+      @include respond-to(medium-screens) {
+        font-size: x-large;
+      }
+      @include respond-to(wide-screens) {
+        font-size: xx-large;
+      }
     }
   }
 
@@ -88,20 +110,62 @@ $tile-colors: (
 }
 
 .gameOver {
-  height: $board-size;
-  width: $board-size;
+  height: $large-board-size;
+  width: $large-board-size;
   border-radius: $border-radius;
   position: absolute;
   z-index: 1000;
   text-align: center;
-  line-height: $board-size;
+  line-height: $large-board-size;
   background-color: rgba(0,0,0,0.5);
 
   .label {
-    font-size: 40px;
+    @include respond-to(handhelds) {
+      font-size: 30px;
+    }
+    @include respond-to(medium-screens) {
+      font-size: 35px;
+    }
+    @include respond-to(wide-screens) {
+      font-size: 40px;
+    }
   }
 }
 
 .newGame {
   font-size: large;
+  @include respond-to(handhelds) {
+    width: 100%;
+    display: block;
+    margin-bottom: 5px;
+  }
+}
+
+.scores {
+  @include respond-to(handhelds) {
+    /* TODO: Center and fill */
+  }
+  @include respond-to(medium-screens) {
+    float: right;
+  }
+  @include respond-to(wide-screens) {
+    float: right;
+  }
+}
+
+.score {
+  padding: 10px;
+  margin-left: 10px;
+  margin-bottom: 15px;
+
+  background-color: $board-background-color;
+  color: $light-text;
+  border-radius: $border-radius;
+  display: inline-block;
+  text-align: center;
+
+  .label {
+    display: block;
+    color: #e9d9c6;
+  }
 }
