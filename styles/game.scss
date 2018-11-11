@@ -66,14 +66,17 @@ $small-board-size: 225px;
   @include respond-to(handhelds) {
     height: $small-board-size;
     width: $small-board-size;
+    line-height: $small-board-size;
   }
   @include respond-to(medium-screens) {
     height: $medium-board-size;
     width: $medium-board-size;
+    line-height: $medium-board-size;
   }
   @include respond-to(wide-screens) {
     height: $large-board-size;
     width: $large-board-size;
+    line-height: $large-board-size;
   }
 
   %tile {
@@ -132,14 +135,15 @@ $small-board-size: 225px;
 }
 
 .gameOver {
-  height: $large-board-size;
-  width: $large-board-size;
+  height: inherit;
+  width: inherit;
+  line-height: inherit;
   border-radius: $border-radius;
   position: absolute;
   z-index: 1000;
   text-align: center;
-  line-height: $large-board-size;
   background-color: rgba(0,0,0,0.5);
+  color: $light-text;
 
   .label {
     @include respond-to(handhelds) {
