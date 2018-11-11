@@ -1,8 +1,10 @@
 import { Component } from 'react';
 import css from '../styles/game.scss';
 import {
+  getExistingGame,
   getRandomNumber,
   getRandomTileNumber,
+  updateGameCache,
   UpEnumerator,
   DownEnumerator,
   LeftEnumerator,
@@ -14,18 +16,25 @@ import Tile from '../components/tile';
 export default class Game extends Component {
   constructor(props) {
     super(props);
-    this.state = getNewState(0);
+    this.state = null;
   }
   componentDidMount() {
     document.addEventListener('keydown', (event) => {
       this.handleKeyPress(event.key);
     });
-    addRandomToGrid(this.state.grid);
-    this.setState({
-      grid: this.state.grid
-    });
+
+    const existingGame = getExistingGame();
+    if (existingGame) {
+      this.setState(existingGame);
+    } else {
+      this.setState(getNewState(0));
+    }
   }
   render() {
+    if (!this.state) {
+      return <div>Loading...</div>;
+    }
+
     const tiles = this.state.grid.map((row, rowIndex) =>
       row.map((score, colIndex) =>
         <Tile key={rowIndex + colIndex} score={score} />
@@ -49,9 +58,11 @@ export default class Game extends Component {
     )
   }
   resetGame() {
-    const resetState = getNewState(this.state.highScore);
-    addRandomToGrid(resetState.grid);
-    this.setState(resetState);
+    this.updateState(getNewState(this.state.highScore));
+  }
+  updateState(newState) {
+    updateGameCache(newState);
+    this.setState(newState);
   }
   handleKeyPress(key) {
     if (!this.state.active) {
@@ -69,7 +80,7 @@ export default class Game extends Component {
     const newScore = this.state.score + score;
     const highScore = this.state.highScore > newScore ? this.state.highScore : newScore;
 
-    this.setState({
+    this.updateState({
       grid: this.state.grid,
       score: newScore,
       active,
@@ -88,18 +99,6 @@ export default class Game extends Component {
         return move(this.state.grid, new RightEnumerator());
       default:
         return { score: 0, active: true };
-    }
-  }
-}
-
-function addRandomToGrid(grid) {
-  let i = 0;
-  while (i < 2) {
-    const row = getRandomNumber(4);
-    const col = getRandomNumber(4);
-    if (grid[row][col] === 0) {
-      grid[row][col] = getRandomTileNumber();
-      i++;
     }
   }
 }
@@ -169,11 +168,27 @@ function getNewState(highScore) {
     score: 0,
     highScore,
     active: true,
-    grid: [
-      [0,0,0,0],
-      [0,0,0,0],
-      [0,0,0,0],
-      [0,0,0,0]
-    ]
+    grid: getNewGrid()
   }
+}
+
+function getNewGrid() {
+  const grid = [
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0]
+  ];
+
+  let i = 0;
+  while (i < 2) {
+    const row = getRandomNumber(4);
+    const col = getRandomNumber(4);
+    if (grid[row][col] === 0) {
+      grid[row][col] = getRandomTileNumber();
+      i++;
+    }
+  }
+
+  return grid;
 }
