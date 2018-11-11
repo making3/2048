@@ -4,7 +4,7 @@ import css from '../styles/site.scss';
 
 export default () => (
   <Layout>
-    <div className={css.layout}>
+    <div>
       <h1 className={css.title}>2048</h1>
       <Game />
     </div>
