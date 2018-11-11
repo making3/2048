@@ -1,5 +1,6 @@
-import {Component} from 'react'
-import css from '../styles/game.scss'
+import { Component } from 'react';
+import css from '../styles/game.scss';
+import { UpEnumerator, DownEnumerator, LeftEnumerator, RightEnumerator } from '../lib/enumerators';
 
 export default class Game extends Component {
   state = {
@@ -73,78 +74,6 @@ export default class Game extends Component {
       default:
         return 0;
     }
-  }
-}
-
-class UpEnumerator {
-  constructor() {
-    this.reset();
-  }
-  next() {
-    this.x++;
-  }
-  previous() {
-    this.x--;
-  }
-  eof() {
-    return this.x >= 4;
-  }
-  getValue(grid, col, row = this.x) {
-    return grid[row][col];
-  }
-  setValue(grid, col, value) {
-    grid[this.x][col] = value;
-  }
-  getEmptyCoordinates(col) {
-    return { row: this.x, col };
-  }
-  getValueFromStack(stack) {
-    return stack.shift();
-  }
-  reset() {
-    this.x = 0;
-  }
-}
-
-class DownEnumerator extends UpEnumerator {
-  next() {
-    this.x--;
-  }
-  previous() {
-    this.x++;
-  }
-  eof() {
-    return this.x < 0;
-  }
-  getValueFromStack(stack) {
-    return stack.pop();
-  }
-  reset() {
-    this.x = 3;
-  }
-}
-
-class LeftEnumerator extends UpEnumerator {
-  getValue(grid, row, col = this.x) {
-    return grid[row][col];
-  }
-  setValue(grid, row, value) {
-    grid[row][this.x] = value;
-  }
-  getEmptyCoordinates(row) {
-    return { row, col: this.x };
-  }
-}
-
-class RightEnumerator extends DownEnumerator {
-  getValue(grid, row, col = this.x) {
-    return grid[row][col];
-  }
-  setValue(grid, row, value) {
-    grid[row][this.x] = value;
-  }
-  getEmptyCoordinates(row) {
-    return { row, col: this.x };
   }
 }
 
