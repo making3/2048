@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import css from '../styles/game.scss';
-import { UpEnumerator, DownEnumerator, LeftEnumerator, RightEnumerator } from '../lib/enumerators';
+import { getRandomTileNumber, UpEnumerator, DownEnumerator, LeftEnumerator, RightEnumerator } from '../lib';
 
 export default class Game extends Component {
   state = {
@@ -21,8 +21,7 @@ export default class Game extends Component {
       const row = getRandomNumber(4);
       const col = getRandomNumber(4);
       if (this.state.grid[row][col] === 0) {
-        // TODO: Add possibility of generating a 4 here and addRandom2.
-        this.state.grid[row][col] = 2;
+        this.state.grid[row][col] = getRandomTileNumber();
         i++;
       }
     }
@@ -123,7 +122,7 @@ function addRandom2(grid, emptyCoordinates) {
   const coordinate = getRandomNumber(emptyCoordinates.length);
   const {row,col} = emptyCoordinates[coordinate];
 
-  grid[row][col] = 2;
+  grid[row][col] = getRandomTileNumber();
 }
 
 function getRandomNumber(max) {
