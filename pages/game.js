@@ -5,6 +5,7 @@ import { getRandomTileNumber, UpEnumerator, DownEnumerator, LeftEnumerator, Righ
 export default class Game extends Component {
   state = {
     score: 0,
+    active: true,
     grid: [
       [0,0,0,0],
       [0,0,0,0],
@@ -42,11 +43,22 @@ export default class Game extends Component {
           <label className={css.label}>Score</label>
           {this.state.score}
         </div>
-        <div className={css.game}>{tiles}</div>
+        <div className={css.game}>
+          {!this.state.active &&
+            <div className={css.gameOver}>
+              <label className={css.label}>Game Over!</label>
+            </div>
+          }
+          {tiles}
+        </div>
       </div>
     )
   }
   handleKeyPress(key) {
+    if (!this.state.active) {
+      return;
+    }
+
     /*
       Parts:
       1. Move grid items the direction specified
@@ -54,10 +66,12 @@ export default class Game extends Component {
       3. Add a 2 to a random location on the board with a 0.
         3a. End the game *if* the board is filled.
     */
-    const score = this.handleArrowEvent(key);
+    const { score, active } = this.handleArrowEvent(key);
+
     this.setState({
       grid: this.state.grid,
-      score: this.state.score + score
+      score: this.state.score + score,
+      active
     });
   }
   handleArrowEvent(key) {
@@ -71,7 +85,7 @@ export default class Game extends Component {
       case 'arrowright':
         return move(this.state.grid, new RightEnumerator());
       default:
-        return 0;
+        return { score: 0, active: true };
     }
   }
 }
@@ -109,7 +123,10 @@ function move(grid, enumerator) {
   if (changedValues) {
     addRandom2(grid, emptyCoordinates);
   }
-  return score;
+  return {
+    score,
+    active: emptyCoordinates.length > 0
+  };
 }
 
 function shiftGrid(grid, getValueFromGrid, map) {

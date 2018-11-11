@@ -1,5 +1,8 @@
 @import 'site';
 
+$boarder-radius: 5px;
+
+$board-size: 400px;
 $board-background-color: #beaca6;
 $tile-background-color: #776e65;
 
@@ -26,7 +29,7 @@ $tile-colors: (
 
   background-color: $board-background-color;
   color: $light-text;
-  border-radius: 5px;
+  border-radius: $boarder-radius;
   display: inline-block;
   padding: 5px;
   text-align: center;
@@ -43,8 +46,8 @@ $tile-colors: (
   justify-content: space-evenly;
 
   border-radius: 5px;
-  height: 400px;
-  width: 400px;
+  height: $board-size;
+  width: $board-size;
   clear: both;
   background-color: $board-background-color;
 
@@ -82,5 +85,20 @@ $tile-colors: (
       background-color: nth($tile-color, 2);
     }
     $n: $n * 2;
+  }
+}
+
+.gameOver {
+  height: $board-size;
+  width: $board-size;
+  border-radius: $boarder-radius;
+  position: absolute;
+  z-index: 1000;
+  text-align: center;
+  line-height: $board-size;
+  background-color: rgba(0,0,0,0.5);
+
+  .label {
+    font-size: 40px;
   }
 }
