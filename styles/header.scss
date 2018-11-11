@@ -1,0 +1,23 @@
+@import 'common';
+
+.header {
+  margin-bottom: 10px;
+  background-color: $header-background-color;
+  height: 40px;
+  border-radius: 10px;
+  position: relative;
+
+  a {
+    color: $header-color;
+    text-decoration: none;
+    padding: 10px;
+    position: absolute;
+    margin: 0;
+    top: 50%;
+    @include transform(translateY(-50%))
+  }
+
+  .home {
+    border-right: 1px;
+  }
+}

@@ -1,0 +1,14 @@
+/*
+  Common colors or functionality go here.
+*/
+
+$header-color: #f9f6f2;
+$header-background-color: #8f7a66;
+$background-color: #faf8ef;
+$border-radius: 5px;
+
+@mixin transform($property) {
+  -webkit-transform: $property;
+  -ms-transform: $property;
+  transform: $property;
+}

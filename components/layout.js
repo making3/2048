@@ -1,11 +1,15 @@
-import Header from './header'
-import css from '../styles/site.scss'
+import Head from 'next/head';
+import Header from './header';
+import css from '../styles/layout.scss';
 
 export default ({children}) => (
   <div>
+    <Head>
+      <title>2048</title>
+    </Head>
     <Header />
-    <div>
+    <div className={css.layout}>
       {children}
     </div>
   </div>
-)
+);

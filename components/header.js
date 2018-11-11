@@ -1,4 +1,4 @@
-import css from '../styles/site.scss';
+import css from '../styles/header.scss';
 import Link from './link';
 
 const Header = () => (

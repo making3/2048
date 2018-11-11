@@ -1,0 +1,12 @@
+@import 'common';
+
+html {
+  height: 100%;
+  min-height: 100%;
+  background-color: $background-color;
+}
+
+.layout {
+  display: flex;
+  justify-content: center;
+}

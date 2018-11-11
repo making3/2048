@@ -1,47 +1,4 @@
-$header-color: #f9f6f2;
-$header-background-color: #8f7a66;
-$background-color: #faf8ef;
-$border-radius: 5px;
-
-@mixin transform($property) {
-  -webkit-transform: $property;
-  -ms-transform: $property;
-  transform: $property;
-}
-
-
-html {
-  height: 100%;
-  min-height: 100%;
-  background-color: $background-color;
-}
-
-.header {
-  margin-bottom: 10px;
-  background-color: $header-background-color;
-  height: 40px;
-  border-radius: 10px;
-  position: relative;
-
-  a {
-    color: $header-color;
-    text-decoration: none;
-    padding: 10px;
-    position: absolute;
-    margin: 0;
-    top: 50%;
-    @include transform(translateY(-50%))
-  }
-
-  .home {
-    border-right: 1px;
-  }
-}
-
-.layout {
-  display: flex;
-  justify-content: center;
-}
+@import 'common';
 
 .title {
   display: flex;
