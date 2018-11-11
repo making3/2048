@@ -9,6 +9,7 @@ import {
   RightEnumerator
 } from '../lib';
 import Score from '../components/score';
+import Tile from '../components/tile';
 
 export default class Game extends Component {
   constructor(props) {
@@ -26,8 +27,8 @@ export default class Game extends Component {
   }
   render() {
     const tiles = this.state.grid.map((row, rowIndex) =>
-      row.map((tileValue, colIndex) =>
-        getTile(rowIndex, colIndex, tileValue)
+      row.map((score, colIndex) =>
+        <Tile key={rowIndex + colIndex} score={score} />
       )
     );
 
@@ -161,18 +162,6 @@ function addRandomToGridWithCoordinates(grid, emptyCoordinates) {
   const {row,col} = emptyCoordinates[coordinate];
 
   grid[row][col] = getRandomTileNumber();
-}
-
-function getTile(rowIndex, colIndex, tileValue) {
-  const key = rowIndex + colIndex;
-  if (tileValue === 0) {
-    return <div className={css.emptyTile} key={key}></div>
-  }
-
-  const tileClass = css[`tile${tileValue}`];
-  return <div className={tileClass} key={key}>
-    <div className={css.number}>{tileValue}</div>
-  </div>
 }
 
 function getNewState(highScore) {
