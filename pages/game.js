@@ -1,6 +1,13 @@
 import { Component } from 'react';
 import css from '../styles/game.scss';
-import { getRandomTileNumber, UpEnumerator, DownEnumerator, LeftEnumerator, RightEnumerator } from '../lib';
+import {
+  getRandomNumber,
+  getRandomTileNumber,
+  UpEnumerator,
+  DownEnumerator,
+  LeftEnumerator,
+  RightEnumerator
+} from '../lib';
 import Score from '../components/score';
 
 export default class Game extends Component {
@@ -12,7 +19,7 @@ export default class Game extends Component {
     document.addEventListener('keydown', (event) => {
       this.handleKeyPress(event.key);
     });
-    addRandom2(this.state.grid);
+    addRandomToGrid(this.state.grid);
     this.setState({
       grid: this.state.grid
     });
@@ -42,7 +49,7 @@ export default class Game extends Component {
   }
   resetGame() {
     const resetState = getNewState(this.state.highScore);
-    addRandom2(resetState.grid);
+    addRandomToGrid(resetState.grid);
     this.setState(resetState);
   }
   handleKeyPress(key) {
@@ -84,7 +91,7 @@ export default class Game extends Component {
   }
 }
 
-function addRandom2(grid) {
+function addRandomToGrid(grid) {
   let i = 0;
   while (i < 2) {
     const row = getRandomNumber(4);
@@ -127,7 +134,7 @@ function move(grid, enumerator) {
   });
 
   if (changedValues) {
-    addRandom2WithCoordinates(grid, emptyCoordinates);
+    addRandomToGridWithCoordinates(grid, emptyCoordinates);
   }
   return {
     score,
@@ -149,16 +156,11 @@ function shiftGrid(grid, getValueFromGrid, map) {
   }
 }
 
-function addRandom2WithCoordinates(grid, emptyCoordinates) {
+function addRandomToGridWithCoordinates(grid, emptyCoordinates) {
   const coordinate = getRandomNumber(emptyCoordinates.length);
   const {row,col} = emptyCoordinates[coordinate];
 
   grid[row][col] = getRandomTileNumber();
-}
-
-// TODO: Move to generate
-function getRandomNumber(max) {
-  return Math.floor(Math.random() * (max));
 }
 
 function getTile(rowIndex, colIndex, tileValue) {
