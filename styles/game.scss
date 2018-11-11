@@ -79,13 +79,22 @@ $small-board-size: 225px;
   %tile {
     flex-grow: 1;
     flex-basis: 21%;
-    margin: 5px;
     border-radius: 5px;
     border-color: blue;
 
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include respond-to(handhelds) {
+      margin: 3px;
+    }
+    @include respond-to(medium-screens) {
+      margin: 4px;
+    }
+    @include respond-to(wide-screens) {
+      margin: 5px;
+    }
   }
 
   .emptyTile {
