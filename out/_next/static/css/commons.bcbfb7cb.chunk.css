@@ -31,14 +31,25 @@ html {
   justify-content: center;
   color: #8f7a66; }
 
+button {
+  cursor: pointer;
+  font-size: 100%;
+  font-family: inherit;
+  border: 0;
+  color: #f9f6f2;
+  background-color: #8f7a66;
+  border-radius: 5px;
+  padding: 10px; }
+
 ._1oSEI3hCeF9t0q-Tfizock {
   float: right;
+  padding: 10px;
+  margin-left: 10px;
   margin-bottom: 15px;
   background-color: #beaca6;
   color: #fef7fa;
   border-radius: 5px;
   display: inline-block;
-  padding: 5px;
   text-align: center; }
   ._1oSEI3hCeF9t0q-Tfizock ._1SGF4ISJzEa4aMAUYTKHbr {
     display: block;
@@ -112,4 +123,7 @@ html {
   background-color: rgba(0, 0, 0, 0.5); }
   .S2VfTYtj7eyDy-2Ec-5ET ._1SGF4ISJzEa4aMAUYTKHbr {
     font-size: 40px; }
+
+._2rfFFIKifxONFD1zre7wv {
+  font-size: large; }
 
