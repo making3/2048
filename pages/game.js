@@ -78,20 +78,27 @@ export default class Game extends Component {
 
 function move(grid, enumerator) {
   let score = 0;
+  let changedValues = false;
   const emptyCoordinates = [];
-  shiftGrid(grid, enumerator.getValue.bind(enumerator), (i, values) => {
+  shiftGrid(grid, enumerator.getValue.bind(enumerator), (i, valueStack) => {
     const stack = [];
     while (!enumerator.eof()) {
-      enumerator.setValue(grid, i, enumerator.getValueFromStack(values) || 0);
+      const valueBefore = enumerator.getValue(grid, i);
+      enumerator.setValue(grid, i, enumerator.getValueFromStack(valueStack) || 0);
       if (stack.length > 0 && stack[stack.length - 1] === enumerator.getValue(grid, i)) {
         enumerator.previous();
         const newValue = enumerator.getValue(grid, i) + stack.pop()
         score += newValue;
         enumerator.setValue(grid, i, newValue);
+        changedValues = true;
       }
-      if (enumerator.getValue(grid, i) === 0) {
+      const valueAfter = enumerator.getValue(grid, i)
+      if (valueAfter === 0) {
         emptyCoordinates.push(enumerator.getEmptyCoordinates(i));
       } else {
+        if (valueBefore !== valueAfter) {
+          changedValues = true;
+        }
         stack.push(enumerator.getValue(grid, i));
       }
       enumerator.next();
@@ -99,8 +106,9 @@ function move(grid, enumerator) {
     enumerator.reset();
   });
 
-  // TODO: Don't add a random 2 if tiles were not shifted (i.e. it was already at an edge).
-  addRandom2(grid, emptyCoordinates);
+  if (changedValues) {
+    addRandom2(grid, emptyCoordinates);
+  }
   return score;
 }
 
