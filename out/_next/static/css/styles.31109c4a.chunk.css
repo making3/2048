@@ -1,15 +1,13 @@
-html {
-  height: 100%;
-  min-height: 100%;
-  background-color: #faf8ef; }
-
-._2fwUbvtTqcMY-6VfkJeI3_ {
+/*
+  Common colors or functionality go here.
+*/
+._3u3vE8fQgK67houTApdZiY {
   margin-bottom: 10px;
   background-color: #8f7a66;
   height: 40px;
   border-radius: 10px;
   position: relative; }
-  ._2fwUbvtTqcMY-6VfkJeI3_ a {
+  ._3u3vE8fQgK67houTApdZiY a {
     color: #f9f6f2;
     text-decoration: none;
     padding: 10px;
@@ -19,16 +17,26 @@ html {
     -webkit-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     transform: translateY(-50%); }
-  ._2fwUbvtTqcMY-6VfkJeI3_ ._10pxxkj_CPVVX1GK0agd38 {
+  ._3u3vE8fQgK67houTApdZiY ._3Q9AT3zhpcscnuXliz2mUE {
     border-right: 1px; }
 
-.w9EqiR3fwLZqICekFSI1C {
+/*
+  Common colors or functionality go here.
+*/
+html {
+  height: 100%;
+  min-height: 100%;
+  background-color: #faf8ef; }
+
+._2sdWAURFOYoA7v7ZFYNUC9 {
   display: flex;
   justify-content: center; }
 
+/*
+  Common colors or functionality go here.
+*/
 ._2DisoATwn5se4uyObVwDXW {
-  display: flex;
-  justify-content: center;
+  text-align: center;
   color: #8f7a66; }
 
 button {
