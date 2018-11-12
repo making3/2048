@@ -12,6 +12,7 @@ import {
 } from '../lib';
 import Score from '../components/score';
 import Tile from '../components/tile';
+import Swipe from '../components/swipe';
 
 export default class Game extends Component {
   constructor(props) {
@@ -40,20 +41,28 @@ export default class Game extends Component {
         <Tile key={rowIndex + colIndex} score={score} />
       )
     );
-
     return (
       <div>
-        <button className={css.newGame} onClick={this.resetGame.bind(this)}>New Game</button>
-        <Score score={this.state.score} label="Score" />
-        <Score score={this.state.highScore} label="High Score" />
-        <div className={css.game}>
-          {!this.state.active &&
-            <div className={css.gameOver}>
-              <label className={css.label}>Game Over!</label>
-            </div>
-          }
-          {tiles}
+        <div className={css.scores}>
+          <Score score={this.state.highScore} label="High Score" />
+          <Score score={this.state.score} label="Score" />
         </div>
+        <button className={css.newGame} onClick={this.resetGame.bind(this)}>New Game</button>
+        <Swipe
+          onSwipeLeft={this.handleKeyPress.bind(this, 'ArrowLeft')}
+          onSwipeRight={this.handleKeyPress.bind(this, 'ArrowRight')}
+          onSwipeUp={this.handleKeyPress.bind(this, 'ArrowUp')}
+          onSwipeDown={this.handleKeyPress.bind(this, 'ArrowDown')}
+          >
+          <div className={css.game}>
+              {!this.state.active &&
+                <div className={css.gameOver}>
+                  <label className={css.label}>Game Over!</label>
+                </div>
+              }
+              {tiles}
+          </div>
+        </Swipe>
       </div>
     )
   }
